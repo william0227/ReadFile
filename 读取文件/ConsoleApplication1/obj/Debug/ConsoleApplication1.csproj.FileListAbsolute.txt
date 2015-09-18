@@ -1,0 +1,15 @@
+D:\test\读取文件\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+D:\test\读取文件\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+D:\test\读取文件\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+D:\test\读取文件\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
+D:\test\读取文件\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+D:\test\读取文件\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+D:\读取文件\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+D:\读取文件\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+D:\读取文件\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+D:\读取文件\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+D:\读取文件\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+D:\读取文件\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
+D:\GitHub\ReadFile\读取文件\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+D:\GitHub\ReadFile\读取文件\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+D:\GitHub\ReadFile\读取文件\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
