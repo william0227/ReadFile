@@ -12,9 +12,6 @@ namespace ConsoleApplication1
     {
         private string fileName;            //需查找的文件名
         private string content;             //需查找的内容       
-        private string oneByteResult = "按一个字节匹配，内容所在位置为：  ";
-        private string twoByteResult = "按两个字节匹配，内容所在位置为：  ";
-        private string fourByteResult = "按四个字节匹配，内容所在位置为：  ";
         private string result = "本次查找结果为： ";                         //最终查找的结果
 
         //File的构造函数
@@ -36,6 +33,10 @@ namespace ConsoleApplication1
             int maxSize = 1024;                         //每次读取的最大字节数
             byte[] byteData = new byte[maxSize];        //存放读取内容的数组
 
+            string oneByteResult = "按一个字节匹配，内容所在位置为：  ";
+            string twoByteResult = "按两个字节匹配，内容所在位置为：  ";
+            string fourByteResult = "按四个字节匹配，内容所在位置为：  ";
+
             try
             {
                 FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
@@ -45,6 +46,8 @@ namespace ConsoleApplication1
                 int times = 0;                      //总共读取的次数
                 int offset = 0;                     //传给ByteMatch的偏移量
                 string fileStr = "";
+
+                
 
                 while (true)                        //循环读取，每次读取限定的最大字节数，读完后清空字符串
                 {
@@ -88,8 +91,10 @@ namespace ConsoleApplication1
             catch (IOException e)
             {
                 result = string.Concat(result, e.ToString());             //异常处理，将异常写入结果中               
-                return;
+                
             }
+
+            WriteResult(oneByteResult, twoByteResult, fourByteResult);
 
         }
 
@@ -119,7 +124,7 @@ namespace ConsoleApplication1
         }
 
         //将查找的内容写入文件
-        public void WriteResult()
+        public void WriteResult(string oneByteResult, string twoByteResult, string fourByteResult)
         {
             try
             {
@@ -158,7 +163,7 @@ namespace ConsoleApplication1
             //开始查找
             File file = new File(fileName, content);
             file.Search();
-            file.WriteResult();
+            
 
             //查找完毕
             Console.WriteLine("查找完毕，请打开文件 D:\\result.txt 查看本次查找结果!!");
