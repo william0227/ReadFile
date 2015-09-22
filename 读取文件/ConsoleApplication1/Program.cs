@@ -10,10 +10,8 @@ namespace ConsoleApplication1
     //文件类
     public class File
     {
-
         private string fileName;            //需查找的文件名
-        private string content;             //需查找的内容
-        private int contentSize;            //内容的长度
+        private string content;             //需查找的内容       
         private string oneByteResult = "按一个字节匹配，内容所在位置为：  ";
         private string twoByteResult = "按两个字节匹配，内容所在位置为：  ";
         private string fourByteResult = "按四个字节匹配，内容所在位置为：  ";
@@ -26,65 +24,75 @@ namespace ConsoleApplication1
             content = Content;
         }
 
-        //计算内容的长度
-        public void GetSize()
-        {
-            contentSize = content.Length;
-
-        }
-
-
         //查找内容
         public void Search()
         {
-            GetSize();
-            if (contentSize == 0)
+            if (content.Length == 0)
             {
-                result += "需查找内容为空";
+                result = string.Concat(result, "需查找内容为空");       //用string.Concat连接短字符串
                 return;
             }
 
-            int maxSize = 1024;         //需读取的最大字节数
-            byte[] byteData = new byte[maxSize];
-            string fileStr = "";
+            int maxSize = 1024;                         //每次读取的最大字节数
+            byte[] byteData = new byte[maxSize];        //存放读取内容的数组
+
             try
             {
                 FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                fs.Seek(0, SeekOrigin.Begin);
-                fs.Read(byteData, 0, byteData.Length);
 
-                int length = byteData.Length;
-                for (int i = 0; i < length; i++)
+                int num = 0;                        //每次读入的字节数
+                int counter = 0;                    //总共读入的字节数
+                int times = 0;                      //总共读取的次数
+                int offset = 0;                     //传给ByteMatch的偏移量
+                string fileStr = "";
+
+                while (true)                        //循环读取，每次读取限定的最大字节数，读完后清空字符串
                 {
-                    fileStr += byteData[i].ToString("X2");
+                    fileStr = "";
+                    fs.Seek(counter, SeekOrigin.Begin);
+                    num = fs.Read(byteData, 0, maxSize);
+                    if (num == 0)                               //如果读完，则退出循环
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        counter += num;
+                        times++;
+                        if (times >= 2)
+                        {
+                            offset = counter;
+                        }
+                        for (int i = 0; i < maxSize; i++)
+                        {
+                            fileStr = string.Concat(fileStr, byteData[i].ToString("X2"));
+                        }
+                        switch (content.Length)
+                        {
+                            case 1: oneByteResult = string.Concat(oneByteResult, ByteMatch(fileStr, 1, offset));
+                                twoByteResult = string.Concat(twoByteResult, ByteMatch(fileStr, 2, offset));
+                                fourByteResult = string.Concat(fourByteResult, ByteMatch(fileStr, 4, offset)); break;
+                            case 2: twoByteResult = string.Concat(twoByteResult, ByteMatch(fileStr, 2, offset));
+                                fourByteResult = string.Concat(fourByteResult, ByteMatch(fileStr, 4, offset)); break;
+                            case 3: fourByteResult = string.Concat(fourByteResult, ByteMatch(fileStr, 4, offset)); break;
+                            case 4: fourByteResult = string.Concat(fourByteResult, ByteMatch(fileStr, 4, offset)); break;
+                            default: break;
+                        }
+                    }
+
                 }
 
-                fs.Dispose();           //打开文件流，将文件内容读入fileStr字符串，然后释放
-
-
-                switch (contentSize)
-                {
-                    case 1: oneByteResult += ByteMatch(fileStr, 1);
-                        twoByteResult += ByteMatch(fileStr, 2);
-                        fourByteResult += ByteMatch(fileStr, 4); break;
-                    case 2: twoByteResult += ByteMatch(fileStr, 2);
-                        fourByteResult += ByteMatch(fileStr, 4); break;
-                    case 3: twoByteResult += ByteMatch(fileStr, 2);
-                        fourByteResult += ByteMatch(fileStr, 4); break;
-                    case 4: fourByteResult += ByteMatch(fileStr, 4); break;
-                    default: break;
-                }
-
+                fs.Dispose();
 
             }
             catch (IOException e)
             {
-                result += e.ToString();              //异常处理，将异常写入结果中               
+                result = string.Concat(result, e.ToString());             //异常处理，将异常写入结果中               
                 return;
             }
 
-
         }
+
 
         /// <summary>
         /// 按字节数对字符串中的内容进行匹配
@@ -92,16 +100,18 @@ namespace ConsoleApplication1
         /// <param name="fileStr">需匹配的字符串</param>
         /// <param name="byteNum">每次需匹配的字节数</param>
         /// <returns>返回匹配到的所有位置</returns>
-        public string ByteMatch(string fileStr, int byteNum)
+        public string ByteMatch(string fileStr, int byteNum, int offset)
         {
             string byteStr = "";
             int len = fileStr.Length;
+            int index = 0;
+
             for (int i = 0; i < len - byteNum; i++)
             {
-                int index = fileStr.Substring(i, byteNum).IndexOf(content);
+                index = fileStr.Substring(i, byteNum).IndexOf(content);
                 if (index != -1)
                 {
-                    byteStr += i + index + " | ";
+                    byteStr = string.Concat(byteStr, (i + index + offset).ToString(), " | ");
                 }
             }
 
@@ -128,12 +138,11 @@ namespace ConsoleApplication1
 
             catch (IOException e)           //异常处理
             {
-                result += e;
+                result = string.Concat(result, e.ToString());
                 return;
             }
 
         }
-
 
     }
     class Program
